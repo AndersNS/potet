@@ -1,9 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { db, Potatoes } from 'astro:db';
+
+const potatoes = await db.select().from(Potatoes);
 ---
 
 <Layout title="Potatoes">
   <main>
     <h1>Welcome to poatatoes</h1>
+    {
+      potatoes.map(({ name }) => (
+        <article>
+          <p>Potatoe: {name}</p>
+        </article>
+      ))
+    }
   </main>
 </Layout>

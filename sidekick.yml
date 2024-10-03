@@ -1,6 +1,9 @@
-name: reviews
-version: V2
-image: ''
-url: potatoes.ander.sh
-port: 8080
-createdAt: Wed Oct  2 08:49:32 CEST 2024
+name: potet
+version: V1
+image: ""
+url: potet.ander.sh
+port: 4321
+createdAt: Thu Oct  3 15:01:53 CEST 2024
+env:
+    file: .env
+    hash: 30c67a5334515e3b09ade0aab9f2b9a1
