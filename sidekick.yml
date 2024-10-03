@@ -1,0 +1,6 @@
+name: reviews
+version: V2
+image: ''
+url: potatoes.ander.sh
+port: 8080
+createdAt: Wed Oct  2 08:49:32 CEST 2024
