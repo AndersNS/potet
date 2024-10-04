@@ -137,7 +137,7 @@ export function Potatoe({
             if (r <= andersRatingRating) {
               return (
                 <Rating.Star
-                  onClick={() => updateRating(r, 'anders')}
+                  onClick={() => updateRating(r - 1, 'anders')}
                   className="hover:cursor-pointer"
                 />
               );
