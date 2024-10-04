@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Potatoe } from '../components/Potatoe';
 import { db, Potatoes } from 'astro:db';
 
 const potatoes = await db.select().from(Potatoes);
@@ -7,12 +8,16 @@ const potatoes = await db.select().from(Potatoes);
 
 <Layout title="Potatoes">
   <main>
-    <h1>Welcome to poatatoes</h1>
+    <h1 class="my-4 text-center text-xl">Poteter</h1>
     {
-      potatoes.map(({ name }) => (
-        <article>
-          <p>Potatoe: {name}</p>
-        </article>
+      potatoes.map(({ potatId, name, andersRating, linnRating }) => (
+        <Potatoe
+          potatoId={potatId}
+          name={name}
+          andersInitialRating={andersRating}
+          linnInitialRating={linnRating}
+          client:only="react"
+        />
       ))
     }
   </main>
