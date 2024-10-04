@@ -30,7 +30,7 @@ export const server = {
         .returning()
         .get();
 
-      return mutate?.andersRating ?? 0;
+      return mutate?.linnRating ?? 0;
     },
   }),
 };
