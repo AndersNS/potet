@@ -110,7 +110,7 @@ export function Potatoe({
   }
 
   return (
-    <div className="flex flex-col items-center mb-8 w-full">
+    <div className="flex flex-col items-center mb-12 w-full">
       <div className="flex gap-3 items-center">
         <PotatIcon />
         <div className="flex flex-col">
