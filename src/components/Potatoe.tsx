@@ -1,5 +1,5 @@
 import { actions } from 'astro:actions';
-import { Rating } from 'flowbite-react';
+import { Rating, Spinner } from 'flowbite-react';
 import { useState } from 'react';
 
 export function Potatoe({
@@ -15,17 +15,24 @@ export function Potatoe({
 }) {
   const [andersRatingRating, setAndersRatingRating] =
     useState(andersInitialRating);
+  const [andersLoading, setAndersLoading] = useState(false);
+
   const [linnRating, setLinnRating] = useState(linnInitialRating);
+  const [linnLoading, setLinnLoading] = useState(false);
 
   async function updateRating(current: number, person: 'anders' | 'linn') {
     if (person === 'anders') {
+      setAndersLoading(true);
       const newRating = await actions.updateAndersRating({ potatoId, current });
       setAndersRatingRating(newRating.data!);
+      setAndersLoading(false);
     }
 
     if (person === 'linn') {
+      setLinnLoading(true);
       const newRating = await actions.updateLinnRating({ potatoId, current });
       setLinnRating(newRating.data!);
+      setLinnLoading(false);
     }
   }
 
@@ -102,47 +109,58 @@ export function Potatoe({
         {name}
       </p>
       Anders:
-      <Rating size="lg">
-        {Array.from({ length: 5 }).map((_, i) => {
-          const r = i + 1;
-          if (r <= andersRatingRating) {
+      {andersLoading ? (
+        <Spinner aria-label="Updating potats" />
+      ) : (
+        <Rating size="lg">
+          {Array.from({ length: 5 }).map((_, i) => {
+            const r = i + 1;
+            if (r <= andersRatingRating) {
+              return (
+                <Rating.Star
+                  onClick={() => updateRating(r, 'anders')}
+                  className="hover:cursor-pointer"
+                />
+              );
+            }
             return (
               <Rating.Star
+                filled={false}
                 onClick={() => updateRating(r, 'anders')}
                 className="hover:cursor-pointer"
               />
             );
-          }
-          return (
-            <Rating.Star
-              filled={false}
-              onClick={() => updateRating(r, 'anders')}
-              className="hover:cursor-pointer"
-            />
-          );
-        })}
-      </Rating>
+          })}
+        </Rating>
+      )}
       Linn:
-      <Rating size="lg">
-        {Array.from({ length: 5 }).map((_, i) => {
-          const r = i + 1;
-          if (r <= linnRating) {
+      {linnLoading ? (
+        <Spinner aria-label="Updating potats" />
+      ) : (
+        <Rating size="lg">
+          {Array.from({ length: 5 }).map((_, i) => {
+            if (linnLoading) {
+              return <Spinner aria-label="Updating potats" />;
+            }
+            const r = i + 1;
+            if (r <= linnRating) {
+              return (
+                <Rating.Star
+                  onClick={() => updateRating(r, 'linn')}
+                  className="hover:cursor-pointer"
+                />
+              );
+            }
             return (
               <Rating.Star
+                filled={false}
                 onClick={() => updateRating(r, 'linn')}
                 className="hover:cursor-pointer"
               />
             );
-          }
-          return (
-            <Rating.Star
-              filled={false}
-              onClick={() => updateRating(r, 'linn')}
-              className="hover:cursor-pointer"
-            />
-          );
-        })}
-      </Rating>
+          })}
+        </Rating>
+      )}
     </div>
   );
 }
