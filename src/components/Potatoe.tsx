@@ -240,8 +240,8 @@ function CommentEditor({
   if (comment && !editingComment) {
     return (
       <>
-        <p className="mt-2 text-center">{comment}</p>
-        <Button size="sm" onClick={() => setEditingComment(true)}>
+        <p className="my-2 text-center">{comment}</p>
+        <Button size="xs" outline onClick={() => setEditingComment(true)}>
           Endre kommentar
         </Button>
       </>
@@ -252,7 +252,7 @@ function CommentEditor({
     <>
       <Button
         className="mt-2"
-        size="sm"
+        size="xs"
         onClick={() => setEditingComment(true)}>
         Kommenter
       </Button>
