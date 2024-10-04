@@ -7,6 +7,7 @@ export const Potatoes = defineTable({
     andersRating: column.number(),
     linnRating: column.number(),
     infoLink: column.text({ default: '' }),
+    comment: column.text({ default: '' }),
   },
 });
 

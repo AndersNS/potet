@@ -10,16 +10,19 @@ const potatoes = await db.select().from(Potatoes);
   <main>
     <h1 class="my-4 text-center text-xl">Poteter</h1>
     {
-      potatoes.map(({ potatId, name, andersRating, linnRating, infoLink }) => (
-        <Potatoe
-          potatoId={potatId}
-          name={name}
-          andersInitialRating={andersRating}
-          linnInitialRating={linnRating}
-          infoLink={infoLink}
-          client:only="react"
-        />
-      ))
+      potatoes.map(
+        ({ potatId, name, andersRating, linnRating, infoLink, comment }) => (
+          <Potatoe
+            potatoId={potatId}
+            name={name}
+            andersInitialRating={andersRating}
+            linnInitialRating={linnRating}
+            infoLink={infoLink}
+            initialComment={comment}
+            client:only="react"
+          />
+        ),
+      )
     }
   </main>
 </Layout>

@@ -1,5 +1,5 @@
 import { actions } from 'astro:actions';
-import { Rating, Spinner } from 'flowbite-react';
+import { Button, Rating, Spinner, Textarea } from 'flowbite-react';
 import { useState } from 'react';
 function PotatIcon() {
   return (
@@ -79,12 +79,14 @@ export function Potatoe({
   andersInitialRating,
   linnInitialRating,
   infoLink,
+  initialComment,
 }: {
   potatoId: string;
   name: string;
   andersInitialRating: number;
   linnInitialRating: number;
   infoLink: string;
+  initialComment: string;
 }) {
   const [andersRatingRating, setAndersRatingRating] =
     useState(andersInitialRating);
@@ -110,7 +112,7 @@ export function Potatoe({
   }
 
   return (
-    <div className="flex flex-col items-center mb-12 w-full">
+    <div className="flex flex-col items-center mb-12 mx-auto max-w-md px-8">
       <div className="flex gap-3 items-center">
         <PotatIcon />
         <div className="flex flex-col">
@@ -137,6 +139,7 @@ export function Potatoe({
             if (r <= andersRatingRating) {
               return (
                 <Rating.Star
+                  key={r}
                   onClick={() => updateRating(r - 1, 'anders')}
                   className="hover:cursor-pointer"
                 />
@@ -144,6 +147,7 @@ export function Potatoe({
             }
             return (
               <Rating.Star
+                key={r}
                 filled={false}
                 onClick={() => updateRating(r, 'anders')}
                 className="hover:cursor-pointer"
@@ -165,6 +169,7 @@ export function Potatoe({
             if (r <= linnRating) {
               return (
                 <Rating.Star
+                  key={r}
                   onClick={() => updateRating(r - 1, 'linn')}
                   className="hover:cursor-pointer"
                 />
@@ -172,6 +177,7 @@ export function Potatoe({
             }
             return (
               <Rating.Star
+                key={r}
                 filled={false}
                 onClick={() => updateRating(r, 'linn')}
                 className="hover:cursor-pointer"
@@ -180,6 +186,76 @@ export function Potatoe({
           })}
         </Rating>
       )}
+      <CommentEditor potatoId={potatoId} initialComment={initialComment} />
     </div>
+  );
+}
+
+function CommentEditor({
+  potatoId,
+  initialComment,
+}: {
+  potatoId: string;
+  initialComment: string;
+}) {
+  const [comment, setComment] = useState(initialComment);
+  const [editingComment, setEditingComment] = useState(false);
+  const [commentSaving, setCommentSaving] = useState(false);
+
+  async function saveComment(potatId: string, currentComment: string) {
+    setCommentSaving(true);
+    const newComment = await actions.updateComment({
+      potatoId: potatId,
+      comment: currentComment,
+    });
+    setComment(newComment.data!);
+    setCommentSaving(false);
+    setEditingComment(false);
+  }
+
+  if (editingComment) {
+    return (
+      <>
+        <Textarea
+          id="comment"
+          placeholder="Beskriv din opplevelse med poteten.."
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          required
+          rows={4}
+        />
+
+        <Button
+          isProcessing={commentSaving}
+          disabled={commentSaving}
+          className="mt-2"
+          size="sm"
+          onClick={() => saveComment(potatoId, comment)}>
+          Lagre
+        </Button>
+      </>
+    );
+  }
+
+  if (comment && !editingComment) {
+    return (
+      <>
+        <p className="mt-2 text-center">{comment}</p>
+        <Button size="sm" onClick={() => setEditingComment(true)}>
+          Endre kommentar
+        </Button>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Button
+        className="mt-2"
+        size="sm"
+        onClick={() => setEditingComment(true)}>
+        Kommenter
+      </Button>
+    </>
   );
 }

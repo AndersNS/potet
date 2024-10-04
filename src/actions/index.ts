@@ -33,4 +33,19 @@ export const server = {
       return mutate?.linnRating ?? 0;
     },
   }),
+  updateComment: defineAction({
+    input: z.object({ potatoId: z.string(), comment: z.string() }),
+    handler: async ({ potatoId, comment }) => {
+      const mutate = await db
+        .update(Potatoes)
+        .set({
+          comment: comment,
+        })
+        .where(eq(Potatoes.potatId, potatoId))
+        .returning()
+        .get();
+
+      return mutate?.comment ?? '';
+    },
+  }),
 };
