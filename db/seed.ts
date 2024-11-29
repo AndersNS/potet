@@ -18,5 +18,12 @@ export default async function seed() {
       infoLink: '',
       comment: 'Sliter med råte og diverse andre problemer.',
     },
+    {
+      potatId: '3',
+      name: 'Mandel',
+      andersRating: 0,
+      linnRating: 0,
+      infoLink: 'https://en.wikipedia.org/wiki/Russet_Burbank',
+    },
   ]);
 }
