@@ -1,27 +1,60 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { Potatoe } from '../components/Potatoe';
-import { db, Potatoes } from 'astro:db';
+import { db, Potatoes } from "astro:db";
+import Layout from "../layouts/Layout.astro";
+import { Potat } from "../components/Potat";
 
 const potatoes = await db.select().from(Potatoes);
+
+const rated = potatoes
+  .filter((potato) => potato.andersRating || potato.linnRating)
+  .map((potato) => ({
+    name: potato.name,
+    averageRating: Math.round((potato.andersRating + potato.linnRating) / 2),
+    infoLink: potato.infoLink,
+    comment: potato.comment,
+  }))
+  .sort((a, b) => b.averageRating - a.averageRating);
+
+const unrated = potatoes
+  .filter((potato) => !potato.andersRating && !potato.linnRating)
+  .map((potato) => ({
+    name: potato.name,
+    averageRating: 0,
+    infoLink: potato.infoLink,
+    comment: potato.comment,
+  }));
 ---
 
 <Layout title="Potatoes">
   <main>
     <h1 class="my-4 text-center text-xl">Poteter</h1>
+    <h2 class="my-4 text-center text-lg">Ledere</h2>
     {
-      potatoes.map(
-        ({ potatId, name, andersRating, linnRating, infoLink, comment }) => (
-          <Potatoe
-            potatoId={potatId}
-            name={name}
-            andersInitialRating={andersRating}
-            linnInitialRating={linnRating}
-            infoLink={infoLink}
-            initialComment={comment}
-            client:only="react"
-          />
-        ),
+      rated.map(({ name, averageRating, infoLink, comment }) => (
+        <Potat
+          name={name}
+          averageRating={averageRating}
+          infoLink={infoLink}
+          initialComment={comment}
+          client:only="react"
+        />
+      ))
+    }
+    {
+      unrated.length !== 0 && (
+        <>
+          <h2 class="my-4 text-center text-lg">Mangler rating</h2>
+
+          {unrated.map(({ name, averageRating, infoLink, comment }) => (
+            <Potat
+              name={name}
+              averageRating={averageRating}
+              infoLink={infoLink}
+              initialComment={comment}
+              client:only="react"
+            />
+          ))}
+        </>
       )
     }
   </main>
